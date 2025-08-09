@@ -1,0 +1,10 @@
+**/sample_dataset/
+**/outputs/
+**/runs/
+**/checkpoints/
+*.pt
+*.pth
+*.npz
+*.npy
+*.zip
+*.nii
