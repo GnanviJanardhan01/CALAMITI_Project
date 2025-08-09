@@ -69,8 +69,45 @@ Multi-modal medical images (e.g., T1, T2, FLAIR) often differ in appearance due 
 ## 🧪 Run Locally
 
 ```bash
-git clone https://github.com/yourusername/calamiti-image-harmonization.git
-cd calamiti-image-harmonization
+#clone the repository
+git clone https://github.com/GnanviJanardhan01/CALAMITI_Project.git
+cd CALAMITI_Project
+
+# Install Git LFS (if not already installed)
+git lfs install
+git lfs pull
+
+#Install dependencies
 pip install -r requirements.txt
-python train.py --model cycle_gan  # or fusionnet / calamiti
+
+#Training
+# CALAMITI Model
+python -m neuroimage_2021_calamiti.encode.encode \
+    --input_dir neuroimage_2021_calamiti/sample_dataset/volumes/SAMPLE_T1_norm.nii \
+    --target_dir neuroimage_2021_calamiti/sample_dataset/volumes/SAMPLE_T2_norm.nii \
+    --epochs 10 \
+    --batch_size 2 \
+    --model calamiti
+
+# CycleGAN Baseline
+python -m neuroimage_2021_calamiti.encode.encode \
+    --input_dir neuroimage_2021_calamiti/sample_dataset/volumes/SAMPLE_T1_norm.nii \
+    --target_dir neuroimage_2021_calamiti/sample_dataset/volumes/SAMPLE_T2_norm.nii \
+    --epochs 10 \
+    --batch_size 2 \
+    --model cyclegan
+
+# FusionNet Baseline
+python -m neuroimage_2021_calamiti.encode.encode \
+    --input_dir neuroimage_2021_calamiti/sample_dataset/volumes/SAMPLE_T1_norm.nii \
+    --target_dir neuroimage_2021_calamiti/sample_dataset/volumes/SAMPLE_T2_norm.nii \
+    --epochs 10 \
+    --batch_size 2 \
+    --model fusionnet
+
+#Inference
+python -m neuroimage_2021_calamiti.decode.decode \
+    --model_path path/to/checkpoint.pth \
+    --input_image neuroimage_2021_calamiti/sample_dataset/volumes/SAMPLE_T1_norm.nii/sub-IXI002_ses-0828_scan-GUYS_T1_initnorm_trans_norm.nii \
+    --output_dir results/
 
